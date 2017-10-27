@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>Cryptoassets</title>
+  <link rel="icon" sizes="192x192"
+  href="https://openclipart.org/image/2400px/svg_to_png/101407/pgb-chip-crypto-3.png">
+  <script src="assets/js/weavedRedirector.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function CryptoAssetsCalc() {
+     var btcWalletAddress = document.getElementById("btcWalletAddress").value;
+     var btcInvestmentAmount = document.getElementById("btcInvestmentAmount").value;
+     var ltcWalletAddress = document.getElementById("ltcWalletAddress").value;
+     var ltcInvestmentAmount = document.getElementById("ltcInvestmentAmount").value;
+     alert('BTC Wallet Address: '+btcWalletAddress +'\nBTC Investements amount: '+btcInvestmentAmount+'\nLTC Wallet Address: '+ltcWalletAddress +'\nLTC Investements amount: '+ltcInvestmentAmount);
+     if(btcRadio) {
+      calculateBalance(walletAddress, investmentAmount,document.getElementById("btcRadio").value);
+    } else {
+      calculateBalance(walletAddress, investmentAmount,document.getElementById("ltcRadio").value);
+    }
+
+  }
+</script>
+</head>
+<body>
+  <br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-10">
+        <div class="card">
+          <h4 class="card-header">
+            <img src="https://openclipart.org/image/2400px/svg_to_png/101407/pgb-chip-crypto-3.png" height="50px">
+            Cryptoassets Balance
+          </h4>
+          <div class="card-body">
+            <p class="card-text">
+              <form action="javascript:CryptoAssetsCalc()">
+                <div class="card text-white bg-warning mb-3">
+                  <div class="card-header"><img src="https://www.belgacoin.com/file.jsp?f=bitcoin" height="30px"> Bitcoin</div>
+                  <div class="card-body">
+                    <p class="card-text"><div class="form-group">
+                      <label for="walletAddress">BTC Wallet address</label>
+                      <input type="text" class="form-control" id="btcWalletAddress" placeholder="Enter your LTC wallet address">
+                    </div>
+                    <div class="form-group">
+                      <label for="Investement">BTC Total Investment</label>
+                      <div class="input-group">
+                        <span class="input-group-addon">€</span>
+                        <input type="text" class="form-control" id="btcInvestmentAmount" placeholder="0">
+                        <span class="input-group-addon">.00</span>
+                      </div>
+                    </div>
+                  </p>
+                </div>
+              </div>
+              <div class="card text-white bg-secondary mb-3">
+                <div class="card-header"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/LTC-400.png" height="30px"> Litecoin</div>
+                  <div class="card-body">
+                    <p class="card-text"><div class="form-group">
+                      <label for="walletAddress">LTC Wallet address</label>
+                      <input type="text" class="form-control" id="ltcWalletAddress" placeholder="Enter your BTC wallet address">
+                    </div>
+                    <div class="form-group">
+                      <label for="Investement">LTC Total Investment</label>
+                      <div class="input-group">
+                        <span class="input-group-addon">€</span>
+                        <input type="text" class="form-control" id="ltcInvestmentAmount" placeholder="0">
+                        <span class="input-group-addon">.00</span>
+                      </div>
+                    </div>
+                  </p>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Calculate</button>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
