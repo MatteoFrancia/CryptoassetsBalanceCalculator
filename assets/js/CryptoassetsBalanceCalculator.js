@@ -37,14 +37,27 @@ window.onload = function() {
 	automagicity = GetURLParameter('automagic');
 
 	if(automagicity) {
+		document.getElementById('automagicity').classList.add('badge-success');
 		btcWalletAddress = GetURLParameter('btcWalletAddress');
 		btcInvestmentAmount = GetURLParameter('btcInvestmentAmount');
 		ltcWalletAddress = GetURLParameter('ltcWalletAddress');
 		ltcInvestmentAmount = GetURLParameter('ltcInvestmentAmount');
-		
+
 		getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount);
+	} else {
+		document.getElementById('automagicity').classList.add('badge-secondary');
 	}
 };
+
+function CryptoAssetsCalc() {
+	var btcWalletAddress = document.getElementById("btcWalletAddress").value;
+	var btcInvestmentAmount = document.getElementById("btcInvestmentAmount").value;
+	var ltcWalletAddress = document.getElementById("ltcWalletAddress").value;
+	var ltcInvestmentAmount = document.getElementById("ltcInvestmentAmount").value;
+	var emailAddress = document.getElementById("emailAddress").value
+
+	getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount, emailAddress);
+}
 
 function GetURLParameter(sParam){
 	var sPageURL = window.location.search.substring(1);
