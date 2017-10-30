@@ -1,7 +1,8 @@
 const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
 const red='#ff0000';
 const green='#47e000';
-const tableHeader = '<table border="2px solid black">'+
+const tableHeader = 
+'<table border="2px solid black">'+
 '<tr><td></td>'+
 '<td><strong>INVESTED</strong></td>'+
 '<td><strong>ACTUAL VALUE</strong></td>'+
@@ -32,20 +33,18 @@ var ltcBalance=0;
 
 var totalBalance=0;
 var report='';
+var actualPercentage = 0;
 
 window.onload = function() {
 	automagicity = GetURLParameter('automagic');
 
 	if(automagicity) {
-		document.getElementById('automagicity').classList.add('badge-success');
 		btcWalletAddress = GetURLParameter('btcWalletAddress');
 		btcInvestmentAmount = GetURLParameter('btcInvestmentAmount');
 		ltcWalletAddress = GetURLParameter('ltcWalletAddress');
 		ltcInvestmentAmount = GetURLParameter('ltcInvestmentAmount');
 
 		getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount);
-	} else {
-		document.getElementById('automagicity').classList.add('badge-secondary');
 	}
 };
 
@@ -54,9 +53,11 @@ function CryptoAssetsCalc() {
 	var btcInvestmentAmount = document.getElementById("btcInvestmentAmount").value;
 	var ltcWalletAddress = document.getElementById("ltcWalletAddress").value;
 	var ltcInvestmentAmount = document.getElementById("ltcInvestmentAmount").value;
-	var emailAddress = document.getElementById("emailAddress").value
 
-	getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount, emailAddress);
+	document.getElementById('calculate').setAttribute("disabled", "");
+	increaseProgressBar('retrieving page data...');
+
+	getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount);
 }
 
 function GetURLParameter(sParam){
@@ -71,7 +72,8 @@ function GetURLParameter(sParam){
 	}
 }
 
-function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcInvestment, emailAddress){  
+function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcInvestment){  
+	increaseProgressBar('Getting BTC wallet Balance...');
 	multiplier=0.00000001;
 	btcInvestmentAmount = btcInvestment;
 	ltcInvestmentAmount = ltcInvestment;
@@ -79,12 +81,14 @@ function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcI
 	const getBtcWalletBalance = () => $.get(corsProxyURL + 'https://api.blockcypher.com/v1/btc/main/addrs/'+btcWalletAddress+'/balance')
 	.then(data => {
 		btcWalletBalance = data.final_balance*multiplier;
+		increaseProgressBar('Getting LTC wallet Balance...');
 		getLtcWalletBalance();
 	});
 
 	const getLtcWalletBalance = () => $.get(corsProxyURL + 'https://api.blockcypher.com/v1/ltc/main/addrs/'+ltcWalletAddress+'/balance')
 	.then(data => {
 		ltcWalletBalance = data.final_balance*multiplier;
+		increaseProgressBar('Retreiving BTC actual value...');
 		getBitcoinActualValue();
 	});
 
@@ -92,6 +96,7 @@ function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcI
 
 		$.getJSON(corsProxyURL + "https://api.kraken.com/0/public/Ticker?pair=BTCEUR", function(data) {
 			btcActualValue = data.result.XXBTZEUR.o;
+			increaseProgressBar('Retreiving LTC actual value...');
 			getLitecoinActualValue();
 		});
 	}
@@ -100,6 +105,7 @@ function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcI
 
 		$.getJSON(corsProxyURL + "https://api.kraken.com/0/public/Ticker?pair=LTCEUR", function(data) {
 			ltcActualValue = data.result.XLTCZEUR.o;
+			increaseProgressBar('Calculating wallets value...');
 			calculateWalletsValue();
 		});
 	}
@@ -110,6 +116,7 @@ function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcI
 function calculateWalletsValue() {
 	btcWalletValue = btcActualValue * btcWalletBalance;
 	ltcWalletValue = ltcActualValue * ltcWalletBalance;
+	increaseProgressBar('calculating investments actual value...');
 	calculateInvestmentsActualValue();
 }
 
@@ -117,6 +124,7 @@ function calculateInvestmentsActualValue() {
 	btcBalance = btcWalletValue - btcInvestmentAmount;
 	ltcBalance = ltcWalletValue - ltcInvestmentAmount;
 	totalBalance = btcBalance + ltcBalance;
+	increaseProgressBar('Building report...');
 	buildReport();
 }
 
@@ -196,6 +204,7 @@ function buildReport() {
 }
 
 function openResultsPage(totalBalance, btcInvestmentAmount, btcActualValue, btcWalletBalance, btcWalletValue, ltcInvestmentAmount, ltcActualValue, ltcWalletBalance, ltcWalletValue) {
+	increaseProgressBar('Opening results page');
 	resultUrl = 
 	'results.html?totalBalance='
 	+
@@ -248,4 +257,13 @@ function makePostRequest(url, body) {
 	}).done(function(msg) {
 		console.log('done');
 	});
+}
+
+function increaseProgressBar(message) {
+	totalSteps = 9;
+	deltaStep = 100/totalSteps;
+	actualPercentage += deltaStep;
+	document.getElementById('progress-bar').setAttribute('style', 'width:' + actualPercentage + '%;');
+	document.getElementById('progressbartext').innerHTML = '<span style="color:#ff0000;">' + message + '</span>'
+
 }
