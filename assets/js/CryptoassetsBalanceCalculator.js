@@ -33,6 +33,31 @@ var ltcBalance=0;
 var totalBalance=0;
 var report='';
 
+window.onload = function() {
+	automagicity = GetURLParameter('automagic');
+
+	if(automagicity) {
+		btcWalletAddress = GetURLParameter('btcWalletAddress');
+		btcInvestmentAmount = GetURLParameter('btcInvestmentAmount');
+		ltcWalletAddress = GetURLParameter('ltcWalletAddress');
+		ltcInvestmentAmount = GetURLParameter('ltcInvestmentAmount');
+		
+		getCryptoValues(btcWalletAddress, btcInvestmentAmount, ltcWalletAddress, ltcInvestmentAmount);
+	}
+};
+
+function GetURLParameter(sParam){
+	var sPageURL = window.location.search.substring(1);
+	var sURLVariables = sPageURL.split('&');
+	for (var i = 0; i < sURLVariables.length; i++){
+		var sParameterName = sURLVariables[i].split('=');
+		if (sParameterName[0] == sParam)
+		{
+			return sParameterName[1];
+		}
+	}
+}
+
 function getCryptoValues(btcWalletAddress, btcInvestment, ltcWalletAddress, ltcInvestment, emailAddress){  
 	multiplier=0.00000001;
 	btcInvestmentAmount = btcInvestment;
@@ -154,7 +179,6 @@ function buildReport() {
 
 	postBody='{ "value1" : "'+report+'", "value2" : "", "value3" : "" }';
 
-	//makePostRequest("https://maker.ifttt.com/trigger/crypto_report/with/key/lvfPBqKSq-spKI3JIpICBp4pLJ7vowamhnbj__4crdt", postBody);
 	openResultsPage(totalBalance.toFixed(2), btcInvestmentAmount, parseFloat(btcActualValue).toFixed(2), btcWalletBalance, parseFloat(btcWalletValue).toFixed(2), ltcInvestmentAmount, parseFloat(ltcActualValue).toFixed(2), ltcWalletBalance, parseFloat(ltcWalletValue).toFixed(2));
 }
 
